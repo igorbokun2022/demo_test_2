@@ -2,7 +2,7 @@ import streamlit as st
 from multiapp import MultiApp
 import PIL as pil
 import requests
-from bs4 import BeautifulSoup
+from bs3 import BeautifulSoup
 import xlwt
 
 flagLocal=False
