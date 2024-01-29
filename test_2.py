@@ -2,10 +2,10 @@ import streamlit as st
 from multiapp import MultiApp
 import PIL as pil
 import requests
-from beautifulsoup4 import BeautifulSoup
+from bs4 import BeautifulSoup
 import xlwt
 
-flagLocal=False
+flagLocal=True
 if flagLocal==True: path='F:/_Data Sience/Веб_приложения/Streamlit/demo_test_2/'
 else:               path=''
 
