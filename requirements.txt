@@ -1,18 +1,6 @@
 streamlit
-pandas
-pymorphy2
-gensim 
-numpy
-matplotlib
-nltk
-pillow
-openpyxl
-
-#io
-#telethon
-#datetime
-#asyncio
-
-#gensim.models.word2vec
-seaborn
-#sklearn.manifold
+multiapp
+import PIL
+requests
+bs4
+xlwt
