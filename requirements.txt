@@ -1,6 +1,9 @@
 streamlit
-multiapp
 pillow
 requests
-bs4==0.0.0
 xlwt
+httpx
+asyncio
+collections
+feedparser
+threading

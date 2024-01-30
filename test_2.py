@@ -1,9 +1,12 @@
 import streamlit as st
-from multiapp import MultiApp
 import PIL as pil
-import requests
-from bs4 import BeautifulSoup
-import xlwt
+
+import httpx
+import asyncio
+from collections import deque
+import feedparser
+import threading
+
 
 flagLocal=False
 if flagLocal==True: path='F:/_Data Sience/Веб_приложения/Streamlit/demo_test_2/'
@@ -14,60 +17,64 @@ st.header('Демо. Веб-приложение на питоне')
 img=pil.Image.open(path+'photo.jpg')
 st.sidebar.image(img, width=250)
 
-def prog1():
-    # создание книги Excel 
-    wb = xlwt.Workbook()
-    # создание страницы Excel
-    ws = wb.add_sheet('Data')
+async def rss_parser(httpx_client, posted_q,
+                     n_test_chars, send_message_func=None):
+    '''Парсер rss ленты'''
 
-    # установка шрифта и стиля для записи в Excel
-    font0 = xlwt.Font()
-    font0.name = 'Times New Roman'
-    font0.colour_index = 0
-    style0 = xlwt.XFStyle()
-    style0.font = font0
-    style0.alignment.horizontal='center'
-    style0.alignment.vertical='center'
+    rss_link = 'https://rssexport.rbc.ru/rbcnews/news/20/full.rss'
+    maxcntmes=10
+    curcntmes=0 
+    flagCycle=True
 
-    # определение ссылки на страницу сайта
-    url_page = 'https://stat.cooperation.uz/procurement/corporate'
-    # запрос всего текста этой страницы сайта на HTML
-    response = requests.get(url_page)
-    text_url = BeautifulSoup(response.text, 'lxml')
-    # получение текста всех строк всех таблиц (одной!) на этой странице (между тегами <tr>)
+    while flagCycle:
+        try:
+            response = await httpx_client.get(rss_link)
+        except:
+            await asyncio.sleep(10)
+            continue
 
-    rows_text = text_url.find_all("tr")
+        feed = feedparser.parse(response.text)
 
+        for entry in feed.entries[::-1]:
+            summary = entry['summary']
+            title = entry['title']
 
-    # установка индекса строки
-    i=0    
-    # цикл по всем строкам, найденным на данной странице 
-    for r in rows_text:
-        # выбор текста текущий строки
-        row_text = r.find_all("td")
-        # запись каждого поля текущей строки в текстовом формате (в т.ч. чисел) в список
-        row_data = [field_text.text for field_text in row_text]
-        st.text(str(row_data))
-        print(row_data) # вывод текущей строки на экран питон
-        # запись каждого поля текущей строки из списка в буфер записи Excel 
-        for j in range(0,len(row_data)):
-            ws.write(i, j, row_data[j], style0)
-        i=i+1    
-      
-    wb.save(path+'parsing_data.xls') # сохранение записанных данных в файл Excel
+            news_text = f'{title}\n{summary}'
+
+            head = news_text[:n_test_chars].strip()
+
+            if head in posted_q:
+                continue
+
+            if send_message_func is None:
+                #print(news_text, '\n')
+                st.text(news_text)
+            else:
+                await send_message_func(f'rbc.ru\n{news_text}')
+           
+            curcntmes=curcntmes+1 
+            posted_q.appendleft(head)
+        
+            if curcntmes>maxcntmes:
+                asyncio.stop()
+                thread1.stop()
+                flagCycle=False
+                exit
+                
+        await asyncio.sleep(5)
     
-    return
+def go():
+    print("11111111111111111111111111111")
+    asyncio.run(rss_parser(httpx_client, posted_q, n_test_chars))
+    print("55555555555555555555555555555")
 
-def prog2():
-    return
-def prog3():
-    return
-def myhelp():
-    return
-    
-app = MultiApp()
-app.add_app("prog1", prog1)
-app.add_app("prog2", prog2)
-app.add_app("prog3", prog3)
-app.add_app("myhelp", myhelp)
-app.run()
+#----------------------------------------------------------------------------
+# Очередь из уже опубликованных постов, чтобы их не дублировать
+posted_q = deque(maxlen=20)
+# 50 первых символов от текста новости - это ключ для проверки повторени
+n_test_chars = 50
+httpx_client = httpx.AsyncClient()
+
+thread1=threading.Thread(target=go).start()
+   
+
