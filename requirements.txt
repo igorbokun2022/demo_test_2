@@ -1,6 +1,6 @@
 streamlit
 multiapp
-PIL
+pillow
 requests
 bs4==0.0.0
 xlwt
