@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 import xlwt
 
-flagLocal=True
+flagLocal=False
 if flagLocal==True: path='F:/_Data Sience/Веб_приложения/Streamlit/demo_test_2/'
 else:               path=''
 
