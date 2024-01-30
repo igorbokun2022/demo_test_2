@@ -4,6 +4,5 @@ requests
 xlwt
 httpx
 asyncio
-collections
 feedparser
 threading

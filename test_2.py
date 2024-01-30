@@ -3,7 +3,6 @@ import PIL as pil
 
 import httpx
 import asyncio
-from collections import deque
 import feedparser
 import threading
 
