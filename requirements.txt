@@ -1,6 +1,6 @@
 streamlit
 multiapp
-import PIL
+PIL
 requests
 bs4==0.0.0
 xlwt
