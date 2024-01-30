@@ -2,5 +2,5 @@ streamlit
 multiapp
 import PIL
 requests
-beautifulsoup==4
+bs4==0.0.1
 xlwt
