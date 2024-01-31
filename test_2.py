@@ -24,8 +24,8 @@ async def rss_parser(httpx_client, posted_q,
     '''Парсер rss ленты'''
 
     rss_link = 'https://rssexport.rbc.ru/rbcnews/news/20/full.rss'
-    maxcntmes=10
-    curcntmes=0 
+    maxcntmes=20
+     
     flagCycle=True
 
     while flagCycle:
@@ -38,11 +38,8 @@ async def rss_parser(httpx_client, posted_q,
         feed = feedparser.parse(response.text)
 
         for entry in feed.entries[::-1]:
-                    
-            curcntmes=curcntmes+1
-            print(curcntmes)
-                       
-            if curcntmes>maxcntmes:
+                           
+            if len(cl_mas_data)>=maxcntmes:
                 print("STOP!")
                 flagCycle=False
                 exit
@@ -56,8 +53,9 @@ async def rss_parser(httpx_client, posted_q,
             posted_q.appendleft(head)
 
             if send_message_func is None:
+                print(str(len(cl_mas_data)+1))
                 print(news_text, '\n')
-                st.text(str(curcntmes))
+                st.text(str(len(cl_mas_data)+1))
                 st.text(news_text)
                 cl_mas_data.append(news_text)
             else:
@@ -70,7 +68,9 @@ def go():
     asyncio.run(rss_parser(httpx_client, posted_q, n_test_chars))
     print("*** STOP GO *** ")
     for i in range(0,len(cl_mas_data)):
+        print(str(i+1))
         print(cl_mas_data[i])
+        st.text(str(i+1))
         st.text(cl_mas_data[i])
     
 
