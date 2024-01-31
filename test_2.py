@@ -12,6 +12,8 @@ flagLocal=False
 if flagLocal==True: path='F:/_Data Sience/Веб_приложения/Streamlit/demo_test_2/'
 else:               path=''
 
+cl_mas_data=[]
+
 st.set_page_config(layout="wide")
 st.header('Демо. Веб-приложение на питоне')
 img=pil.Image.open(path+'photo.jpg')
@@ -55,9 +57,9 @@ async def rss_parser(httpx_client, posted_q,
 
             if send_message_func is None:
                 print(news_text, '\n')
-                await asyncio.sleep(10)
                 st.text(str(curcntmes))
                 st.text(news_text)
+                cl_mas_data.append(news_text)
             else:
                 await send_message_func(f'rbc.ru\n{news_text}')
                                       
@@ -78,4 +80,5 @@ httpx_client = httpx.AsyncClient()
 
 thread1=threading.Thread(target=go).start()
    
-
+for i in range(0,len(cl_mas_data)):
+    st.text(cl_mas_data[i])
