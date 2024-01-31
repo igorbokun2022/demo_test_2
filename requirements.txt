@@ -5,6 +5,3 @@ xlwt
 httpx
 asyncio
 feedparser
-collections
-threading
-
