@@ -69,6 +69,10 @@ def go():
     print(" *** START GO *** ")
     asyncio.run(rss_parser(httpx_client, posted_q, n_test_chars))
     print("*** STOP GO *** ")
+    for i in range(0,len(cl_mas_data)):
+        print(cl_mas_data[i])
+        st.text(cl_mas_data[i])
+    
 
 #----------------------------------------------------------------------------
 # Очередь из уже опубликованных постов, чтобы их не дублировать
@@ -80,5 +84,3 @@ httpx_client = httpx.AsyncClient()
 
 thread1=threading.Thread(target=go).start()
    
-for i in range(0,len(cl_mas_data)):
-    st.text(cl_mas_data[i])
