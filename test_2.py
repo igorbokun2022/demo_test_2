@@ -40,7 +40,7 @@ async def rss_parser(httpx_client, posted_q,
         for entry in feed.entries[::-1]:
                            
             if len(cl_mas_data)>=maxcntmes:
-                print("STOP!")
+                #print("STOP!")
                 flagCycle=False
                 exit
                 
@@ -53,8 +53,8 @@ async def rss_parser(httpx_client, posted_q,
             posted_q.appendleft(head)
 
             if send_message_func is None:
-                print(str(len(cl_mas_data)+1))
-                print(news_text, '\n')
+                #print(str(len(cl_mas_data)+1))
+                #print(news_text, '\n')
                 st.text(str(len(cl_mas_data)+1))
                 st.text(news_text)
                 cl_mas_data.append(news_text)
@@ -64,12 +64,12 @@ async def rss_parser(httpx_client, posted_q,
         await asyncio.sleep(5)
     
 def go():
-    print(" *** START GO *** ")
+    #print(" *** START GO *** ")
     asyncio.run(rss_parser(httpx_client, posted_q, n_test_chars))
     print("*** STOP GO *** ")
     for i in range(0,len(cl_mas_data)):
-        print(str(i+1))
-        print(cl_mas_data[i])
+        #print(str(i+1))
+        #print(cl_mas_data[i])
         st.text(str(i+1))
         st.text(cl_mas_data[i])
     
