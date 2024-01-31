@@ -39,8 +39,7 @@ async def rss_parser(httpx_client, posted_q,
                     
             curcntmes=curcntmes+1
             print(curcntmes)
-            st.text("*********************************")
-            
+                       
             if curcntmes>maxcntmes:
                 print("STOP!")
                 flagCycle=False
@@ -56,6 +55,7 @@ async def rss_parser(httpx_client, posted_q,
 
             if send_message_func is None:
                 print(news_text, '\n')
+                await asyncio.sleep(10)
                 st.text(str(curcntmes))
                 st.text(news_text)
             else:
