@@ -5,6 +5,7 @@ xlwt
 httpx
 asyncio
 feedparser
-pip install threading
 threading
 dique
+threading
+
