@@ -39,6 +39,7 @@ async def rss_parser(httpx_client, posted_q,
                     
             curcntmes=curcntmes+1
             print(curcntmes)
+            st.text("*********************************")
             
             if curcntmes>maxcntmes:
                 print("STOP!")
