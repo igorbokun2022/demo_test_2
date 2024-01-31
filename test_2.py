@@ -62,18 +62,13 @@ async def rss_parser(httpx_client, posted_q,
                 await send_message_func(f'rbc.ru\n{news_text}')
                                       
         await asyncio.sleep(5)
-    
+        
+       
 def go():
-    #print(" *** START GO *** ")
+    print(" *** START GO *** ")
     asyncio.run(rss_parser(httpx_client, posted_q, n_test_chars))
-    #print("*** STOP GO *** ")
-    for i in range(0,len(cl_mas_data)):
-        #print(str(i+1))
-        #print(cl_mas_data[i])
-        st.text(str(i+1))
-        st.text(cl_mas_data[i])
-    
-
+    print("*** STOP GO *** ")
+   
 #----------------------------------------------------------------------------
 # Очередь из уже опубликованных постов, чтобы их не дублировать
 # Очередь из уже опубликованных постов, чтобы их не дублировать
@@ -82,5 +77,10 @@ posted_q = deque(maxlen=20)
 n_test_chars = 50
 httpx_client = httpx.AsyncClient()
 
-thread1=threading.Thread(target=go).start()
+threading.Thread(target=go).start()
    
+for i in range(0,len(cl_mas_data)):
+        print(str(i+1))
+        print(cl_mas_data[i])
+        st.text(str(i+1))
+        st.text(cl_mas_data[i])
