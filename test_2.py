@@ -27,9 +27,7 @@ async def rss_parser(httpx_client, posted_q,
     maxcntmes=20
      
     flagCycle=True
-    
-    st.text("Начат цикл оппроса новостного канала RSS")
-
+ 
     while flagCycle:
         try:
             response = await httpx_client.get(rss_link)
@@ -59,8 +57,6 @@ async def rss_parser(httpx_client, posted_q,
             if send_message_func is None:
                 #print(str(len(cl_mas_data)+1))
                 #print(news_text, '\n')
-                st.text(str(len(cl_mas_data)+1))
-                st.text(news_text)
                 cl_mas_data.append(news_text)
             else:
                 await send_message_func(f'rbc.ru\n{news_text}')
