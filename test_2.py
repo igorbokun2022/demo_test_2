@@ -23,7 +23,7 @@ async def rss_parser(httpx_client, posted_q,
     '''Парсер rss ленты'''
 
     rss_link = 'https://rssexport.rbc.ru/rbcnews/news/20/full.rss'
-    maxcntmes=20
+    maxcntmes=100
     flagCycle=True
  
     asyncio.new_event_loop()   
@@ -52,8 +52,8 @@ async def rss_parser(httpx_client, posted_q,
             if head in posted_q: continue
            
             if send_message_func is None:
-                print(str(len(cl_mas_data)+1))
-                print(news_text, '\n')
+                #print(str(len(cl_mas_data)+1))
+                #print(news_text, '\n')
                 cl_mas_data.append(news_text)
             else:
                 await send_message_func(f'rbc.ru\n{news_text}')
@@ -69,7 +69,7 @@ async def rss_parser(httpx_client, posted_q,
 but_start=st.sidebar.button("Начать чтение новостей")
 if but_start:
     # Очередь из уже опубликованных постов, чтобы их не дублировать
-    posted_q = deque(maxlen=30)
+    posted_q = deque(maxlen=20)
     # 50 первых символов от текста новости - это ключ для проверки повторени
     n_test_chars = 50
     httpx_client = httpx.AsyncClient()
@@ -78,7 +78,7 @@ if but_start:
     print("****************************************")
 
     for i in range(0,len(cl_mas_data)):
-        print(str(i+1))
-        print(cl_mas_data[i])
+        #print(str(i+1))
+        #print(cl_mas_data[i])
         st.text(str(i+1))
         st.text(cl_mas_data[i])
