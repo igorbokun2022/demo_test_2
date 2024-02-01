@@ -5,7 +5,6 @@ import httpx
 import asyncio
 import feedparser
 from collections import deque
-import threading
 
 flagLocal=False
 
@@ -15,7 +14,7 @@ else:               path=''
 cl_mas_data=[]
 
 st.set_page_config(layout="wide")
-st.header('Демо. Веб-приложение на питоне')
+st.header('Демо. Веб-приложение на питоне. Визуальный интеллектуальный анализ новостей')
 img=pil.Image.open(path+'photo.jpg')
 st.sidebar.image(img, width=250)
 
@@ -27,7 +26,7 @@ async def rss_parser(httpx_client, posted_q,
     maxcntmes=20
     flagCycle=True
  
-    loop=asyncio.new_event_loop()   
+    asyncio.new_event_loop()   
  
     while flagCycle:
         try:
@@ -39,8 +38,6 @@ async def rss_parser(httpx_client, posted_q,
         feed = feedparser.parse(response.text)
 
         for entry in feed.entries[::-1]:
-             
-            st.text(entry)               
               
             if len(cl_mas_data)>=maxcntmes:
                 #print("STOP!")
@@ -67,22 +64,15 @@ async def rss_parser(httpx_client, posted_q,
     
     return cl_mas_data   
        
-def go():
-    print(" *** START GO *** ")
-    cl_mas_data=asyncio.run(rss_parser(httpx_client, posted_q, n_test_chars))
-    print("*** STOP GO *** ")
-    return cl_mas_data 
-
 #*************************************************************************************
 
 but_start=st.sidebar.button("Начать чтение новостей")
 if but_start:
     # Очередь из уже опубликованных постов, чтобы их не дублировать
-    posted_q = deque(maxlen=20)
+    posted_q = deque(maxlen=30)
     # 50 первых символов от текста новости - это ключ для проверки повторени
     n_test_chars = 50
     httpx_client = httpx.AsyncClient()
-    #threading.Thread(target=go).start()
     cl_mas_data=asyncio.run(rss_parser(httpx_client, posted_q, n_test_chars))
    
     print("****************************************")
