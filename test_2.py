@@ -55,6 +55,8 @@ async def rss_parser(httpx_client, posted_q,
                 #print(str(len(cl_mas_data)+1))
                 #print(news_text, '\n')
                 cl_mas_data.append(news_text)
+                st.text(str(len(cl_mas_data)))
+                st.text(news_text)
             else:
                 await send_message_func(f'rbc.ru\n{news_text}')
             
