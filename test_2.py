@@ -12,6 +12,7 @@ if flagLocal==True: path='F:/_Data Sience/Веб_приложения/Streamlit/
 else:               path=''
 
 cl_mas_data=[]
+cl_mas_data_short=[]
 
 st.set_page_config(layout="wide")
 st.header('Демо. Веб-приложение на питоне. Визуальный интеллектуальный анализ новостей')
@@ -41,7 +42,6 @@ async def rss_parser(httpx_client, posted_q,
               
             if len(cl_mas_data)>=maxcntmes:
                 #print("STOP!"
-                response.close()
                 flagCycle=False
                 exit
                 
@@ -50,12 +50,13 @@ async def rss_parser(httpx_client, posted_q,
             news_text = f'{title}\n{summary}'
             head = news_text[:n_test_chars].strip()
 
-            if head in cl_mas_data: continue
+            if head in cl_mas_data_short: continue
            
             if send_message_func is None:
                 print(str(len(cl_mas_data)+1))
                 print(news_text, '\n')
                 cl_mas_data.append(news_text)
+                cl_mas_data_short.append(news_text[:n_test_chars].strip())
                 st.text(str(len(cl_mas_data)))
                 st.text(news_text)
             else:
