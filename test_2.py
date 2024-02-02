@@ -40,7 +40,8 @@ async def rss_parser(httpx_client, posted_q,
         for entry in feed.entries[::-1]:
               
             if len(cl_mas_data)>=maxcntmes:
-                #print("STOP!")
+                #print("STOP!"
+                response.close()
                 flagCycle=False
                 exit
                 
@@ -49,11 +50,11 @@ async def rss_parser(httpx_client, posted_q,
             news_text = f'{title}\n{summary}'
             head = news_text[:n_test_chars].strip()
 
-            #if head in posted_q: continue
+            if head in cl_mas_data: continue
            
             if send_message_func is None:
-                #print(str(len(cl_mas_data)+1))
-                #print(news_text, '\n')
+                print(str(len(cl_mas_data)+1))
+                print(news_text, '\n')
                 cl_mas_data.append(news_text)
                 st.text(str(len(cl_mas_data)))
                 st.text(news_text)
@@ -80,7 +81,7 @@ if but_start:
     print("****************************************")
 
     for i in range(0,len(cl_mas_data)):
-        #print(str(i+1))
-        #print(cl_mas_data[i])
-        st.text(str(i+1))
-        st.text(cl_mas_data[i])
+        print(str(i+1))
+        print(cl_mas_data[i])
+        #st.text(str(i+1))
+        #st.text(cl_mas_data[i])
