@@ -67,7 +67,7 @@ async def rss_parser(httpx_client, posted_q,
                                       
         await asyncio.sleep(5)
     
-    return cl_mas_data   
+    return cl_mas_data, posted_q    
        
 #*************************************************************************************
 
@@ -78,7 +78,7 @@ if but_start:
     # 50 первых символов от текста новости - это ключ для проверки повторени
     n_test_chars = 50
     httpx_client = httpx.AsyncClient()
-    cl_mas_data=asyncio.run(rss_parser(httpx_client, posted_q, n_test_chars))
+    cl_mas_data, posted_q = asyncio.run(rss_parser(httpx_client, posted_q, n_test_chars))
    
     print("****************************************")
 
@@ -87,3 +87,6 @@ if but_start:
         print(cl_mas_data[i])
         #st.text(str(i+1))
         #st.text(cl_mas_data[i])
+    
+    st.text(posted_q)    
+    print(posted_q)
