@@ -4,7 +4,7 @@ import PIL as pil
 import httpx
 import asyncio
 import feedparser
-from collections import deque
+from collections import deque 
 
 flagLocal=False
 
@@ -22,73 +22,52 @@ async def rss_parser(httpx_client, posted_q,
                      n_test_chars, send_message_func=None):
     '''Парсер rss ленты'''
 
+    max_cnt_mes=100 
+    cl_mas_mes=[]
     rss_link = 'https://rssexport.rbc.ru/rbcnews/news/20/full.rss'
-    maxcntmes=200
-    flagCycle=True
- 
-    asyncio.new_event_loop()   
- 
-    while flagCycle:
+
+    while True:
         try:
             response = await httpx_client.get(rss_link)
         except:
             await asyncio.sleep(10)
             continue
-                    
+
         feed = feedparser.parse(response.text)
-        st.text(feed)
 
         for entry in feed.entries[::-1]:
-            st.text(entry)  
-            
-            if len(cl_mas_data)>=maxcntmes:
-                st.text("STOP!") 
-                st.text(str(len(cl_mas_data)))
-                print("STOP!")
-                print(str(len(cl_mas_data)))
-                flagCycle=False
-                exit
-                
             summary = entry['summary']
             title = entry['title']
+
             news_text = f'{title}\n{summary}'
+
             head = news_text[:n_test_chars].strip()
 
-            if head in posted_q: continue
-           
+            if head in posted_q:
+                continue
+
             if send_message_func is None:
-                print(str(len(cl_mas_data)+1))
+                cl_mas_mes.append(news_text)
+                print(str(len(cl_mas_mes)+1))
                 print(news_text, '\n')
-                cl_mas_data.append(news_text)
-                st.text(str(len(cl_mas_data)))
-                st.text(news_text)
+                st.tet(str(len(cl_mas_mes)+1))
+                st.tet(news_text)
             else:
                 await send_message_func(f'rbc.ru\n{news_text}')
-            
-            posted_q.appendleft(head)    
-                                      
+
+            posted_q.appendleft(head)
+
         await asyncio.sleep(5)
-    
-    return cl_mas_data, posted_q    
-       
-#*************************************************************************************
 
-but_start=st.sidebar.button("Начать чтение новостей")
-if but_start:
+
+if __name__ == "__main__":
+
     # Очередь из уже опубликованных постов, чтобы их не дублировать
-    posted_q = deque(maxlen=200)
-    # 50 первых символов от текста новости - это ключ для проверки повторени
-    n_test_chars = 50
-    httpx_client = httpx.AsyncClient()
-    cl_mas_data, posted_q = asyncio.run(rss_parser(httpx_client, posted_q, n_test_chars))
-   
-    print("****************************************")
+    posted_q = deque(maxlen=20)
 
-    for i in range(0,len(cl_mas_data)):
-        print(str(i+1))
-        print(cl_mas_data[i])
-        #st.text(str(i+1))
-        #st.text(cl_mas_data[i])
-    
-    st.text(posted_q)    
-    print(posted_q)
+    # 50 первых символов от текста новости - это ключ для проверки повторений
+    n_test_chars = 50
+
+    httpx_client = httpx.AsyncClient()
+
+    asyncio.run(rss_parser(httpx_client, posted_q, n_test_chars))
