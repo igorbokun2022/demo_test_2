@@ -39,6 +39,7 @@ async def rss_parser(httpx_client, posted_q,
 
         for entry in feed.entries[::-1]:
               
+            '''
             if len(cl_mas_data)>=maxcntmes:
                 st.text("STOP!") 
                 st.text(str(len(cl_mas_data)))
@@ -46,7 +47,7 @@ async def rss_parser(httpx_client, posted_q,
                 print(str(len(cl_mas_data)))
                 flagCycle=False
                 exit
-                
+            '''    
             summary = entry['summary']
             title = entry['title']
             news_text = f'{title}\n{summary}'
