@@ -6,18 +6,6 @@ import asyncio
 import feedparser
 from collections import deque 
 
-flagLocal=False
-
-if flagLocal==True: path='F:/_Data Sience/Веб_приложения/Streamlit/demo_test_2/'
-else:               path=''
-
-cl_mas_data=[]
-
-st.set_page_config(layout="wide")
-st.header('Демо. Веб-приложение на питоне. Визуальный интеллектуальный анализ новостей')
-img=pil.Image.open(path+'photo.jpg')
-st.sidebar.image(img, width=250)
-
 async def rss_parser(httpx_client, posted_q,
                      n_test_chars, send_message_func=None):
     '''Парсер rss ленты'''
@@ -61,6 +49,19 @@ async def rss_parser(httpx_client, posted_q,
 
 
 if __name__ == "__main__":
+
+    flagLocal=False
+
+    if flagLocal==True: path='F:/_Data Sience/Веб_приложения/Streamlit/demo_test_2/'
+    else:               path=''
+
+    cl_mas_data=[]
+
+    st.set_page_config(layout="wide")
+    st.header('Демо. Веб-приложение на питоне. Визуальный интеллектуальный анализ новостей')
+    img=pil.Image.open(path+'photo.jpg')
+    st.sidebar.image(img, width=250)
+    
 
     # Очередь из уже опубликованных постов, чтобы их не дублировать
     posted_q = deque(maxlen=20)
