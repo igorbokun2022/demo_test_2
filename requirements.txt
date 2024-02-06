@@ -5,3 +5,4 @@ xlwt
 httpx
 asyncio
 feedparser
+telethon
