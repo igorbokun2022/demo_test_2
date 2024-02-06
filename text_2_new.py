@@ -15,7 +15,7 @@ def telegram_parser(cl_mas_mes, send_message_func=None, loop=None):
     # Канал источник новостей @prime1
     channel_source = 'https://t.me/prime1'
 
-    client = TelegramClient(session, api_id, api_hash, loop=loop)
+    client = TelegramClient(session, api_id, api_hash)
     client.start()
 
     @client.on(events.NewMessage(chats=channel_source))
