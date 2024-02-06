@@ -1,53 +1,43 @@
-import httpx
-import asyncio
-from collections import deque
-import feedparser
+import streamlitr as st
+from telethon import TelegramClient, events
 
 
-async def rss_parser(httpx_client, posted_q,
-                     n_test_chars, send_message_func=None):
-    '''Парсер rss ленты'''
+def telegram_parser(cl_mas_mes, send_message_func=None, loop=None):
+    '''Телеграм парсер'''
 
-    rss_link = 'https://rssexport.rbc.ru/rbcnews/news/20/full.rss'
+    # Параметры из my.telegram.org
+    # Параметры из my.telegram.or
+    api_id = 16387030
+    api_hash = '07bfab67941aa8ebe50f836e3b5c5704'
+    # Сессия клиента teletho
+    session = 'telemesmonitor'
 
-    while True:
-        try:
-            response = await httpx_client.get(rss_link)
-        except:
-            await asyncio.sleep(10)
-            continue
+    # Канал источник новостей @prime1
+    channel_source = 'https://t.me/prime1'
 
-        feed = feedparser.parse(response.text)
+    client = TelegramClient(session, api_id, api_hash, loop=loop)
+    client.start()
 
-        for entry in feed.entries[::-1]:
-            summary = entry['summary']
-            title = entry['title']
+    @client.on(events.NewMessage(chats=channel_source))
+    async def handler(event):
+        '''Забирает посты из телеграмм каналов и посылает их в наш канал'''
 
-            news_text = f'{title}\n{summary}'
+        if send_message_func is None:
+            cl_mas_mes.append(event.raw)
+            print(str(len(cl_mas_mes)+1))
+            print(event.raw_text, '\n')
+            st.text(str(len(cl_mas_mes)+1))
+            st.text(event.raw_text)
+        else:
+            await send_message_func(f'@prime1\n{event.raw_text}')
 
-            head = news_text[:n_test_chars].strip()
-
-            if head in posted_q:
-                continue
-
-            if send_message_func is None:
-                print(news_text, '\n')
-            else:
-                await send_message_func(f'rbc.ru\n{news_text}')
-
-            posted_q.appendleft(head)
-
-        await asyncio.sleep(5)
+    return client
 
 
 if __name__ == "__main__":
 
-    # Очередь из уже опубликованных постов, чтобы их не дублировать
-    posted_q = deque(maxlen=20)
+    cl_mas_mes=[]    
 
-    # 50 первых символов от текста новости - это ключ для проверки повторений
-    n_test_chars = 50
+    client = telegram_parser(cl_mas_mes)
 
-    httpx_client = httpx.AsyncClient()
-
-    asyncio.run(rss_parser(httpx_client, posted_q, n_test_chars))
+    client.run_until_disconnected()
