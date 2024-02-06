@@ -1,4 +1,4 @@
-import streamlitr as st
+import streamlit as st
 from telethon import TelegramClient, events
 
 
