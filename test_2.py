@@ -36,9 +36,9 @@ async def rss_parser(httpx_client, posted_q,
 
             if send_message_func is None:
                 cl_mas_mes.append(news_text)
-                print(str(len(cl_mas_mes)+1))
+                print(str(len(cl_mas_mes)))
                 print(news_text, '\n')
-                st.text(str(len(cl_mas_mes)+1))
+                st.text(str(len(cl_mas_mes)))
                 st.text(news_text)
             else:
                 await send_message_func(f'rbc.ru\n{news_text}')
@@ -70,5 +70,6 @@ if __name__ == "__main__":
     n_test_chars = 50
 
     httpx_client = httpx.AsyncClient()
-
-    asyncio.run(rss_parser(httpx_client, posted_q, n_test_chars))
+    
+    for i in range(1,2):
+        asyncio.run(rss_parser(httpx_client, posted_q, n_test_chars))
