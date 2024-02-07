@@ -149,13 +149,16 @@ async def rss_parser(httpx_client, posted_q,
                      n_test_chars, send_message_func=None):
     '''Парсер rss ленты'''
 
-    max_cnt_mes=100 
+    max_cnt_mes=20 
     cl_mas_mes=[]
     rss_link = 'https://rssexport.rbc.ru/rbcnews/news/20/full.rss'
 
     while True:
         try:
             response = await httpx_client.get(rss_link)
+            st.info(str(len(cl_mas_mes)))
+            if len(cl_mas_mes)>max_cnt_mes:
+                return(cl_mas_mes) 
         except:
             await asyncio.sleep(10)
             continue
