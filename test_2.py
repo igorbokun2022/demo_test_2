@@ -156,9 +156,6 @@ async def rss_parser(httpx_client, posted_q,
     while True:
         try:
             response = await httpx_client.get(rss_link)
-            st.info(str(len(cl_mas_mes)))
-            if len(cl_mas_mes)>max_cnt_mes:
-                return(cl_mas_mes) 
         except:
             await asyncio.sleep(10)
             continue
@@ -166,6 +163,11 @@ async def rss_parser(httpx_client, posted_q,
         feed = feedparser.parse(response.text)
 
         for entry in feed.entries[::-1]:
+            
+            st.info(str(len(cl_mas_mes)))
+            if len(cl_mas_mes)>max_cnt_mes:
+                return(cl_mas_mes)
+            
             summary = entry['summary']
             title = entry['title']
 
