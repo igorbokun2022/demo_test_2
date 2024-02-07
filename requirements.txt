@@ -12,3 +12,4 @@ pymorphy2
 numpy
 matplotlib
 nltk 
+gensim
