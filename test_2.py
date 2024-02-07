@@ -165,7 +165,7 @@ async def rss_parser(httpx_client, posted_q,
         for entry in feed.entries[::-1]:
             
             st.info(str(len(cl_mas_mes)))
-            if len(cl_mas_mes)>max_cnt_mes:
+            if len(cl_mas_mes)==max_cnt_mes:
                 return(cl_mas_mes)
             
             summary = entry['summary']
