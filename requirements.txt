@@ -6,3 +6,9 @@ httpx
 asyncio
 feedparser
 telethon
+
+pandas
+pymorphy2
+numpy
+matplotlib
+nltk 
