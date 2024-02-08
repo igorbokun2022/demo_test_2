@@ -10,6 +10,6 @@ telethon
 pandas
 pymorphy2
 numpy
-matplotlib
+matplotlib>3.5
 nltk 
 gensim
