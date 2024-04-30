@@ -3,10 +3,15 @@ import PIL as pil
 import datetime as dt
 
 st.header('Web-сервис на основе python (streamlit)')
-st.info(st.server.request)
 
-if st.server.request == 'bar':
+if "messages" not in st.session_state:
     st.text('********************************************')
-    #df=dt.time()     
-    #st.server.({'data': df})
-  # And .respond() would cause the script to finish executing immediately.
+    st.text("st.session_state: "+str(st.session_state))
+    st.text('********************************************')
+    st.text(dt.time())    
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
+    for message in st.session_state.messages:   
+        st.text(message)
+            
+    
